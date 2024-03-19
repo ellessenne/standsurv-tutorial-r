@@ -8,6 +8,7 @@
 # Packages
 library(tidyverse)
 library(rstpm2)
+library(ggplot2)
 
 # Load data
 rott2 <- readRDS(file = "data/rott2.RDS")
