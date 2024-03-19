@@ -36,6 +36,7 @@ km_data <- km_data |>
 km_plot <- ggplot(km_data, aes(x = time, y = surv, group = hormon)) +
   geom_stepribbon(aes(ymin = lower, ymax = upper), alpha = 0.1) +
   geom_step(aes(linetype = hormon)) +
+  scale_x_continuous(breaks = seq(0, 10, by = 2)) +
   labs(y = "Survival probability", x = "Years from surgery", color = "", fill = "", linetype = "") +
   coord_cartesian(ylim = c(0, 1)) +
   theme_bw(base_size = 12) +
