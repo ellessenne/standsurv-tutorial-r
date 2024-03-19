@@ -9,6 +9,13 @@ library(tidyverse)
 # Load data
 rott2 <- read_dta(file = "data-raw/rott2.dta")
 
+# Remove all Stata attributes/labels
+rott2 <- rott2 |>
+  zap_formats() |>
+  zap_label() |>
+  zap_labels() |>
+  zap_missing()
+
 # Generate follow-up time time as the time to death or time to relapse (depending on which event occurred first)
 # Note: There are 43 subjects who have died without relapse, but their time of death is greater than the censoring time for relapse.
 # How to handle this censoring is not straightforward but for simiplicity (as this dataset is only used to demonstrate the methods) we will assume that these individuals remained relapse fee after their censoring time for relapse until their available death time.
