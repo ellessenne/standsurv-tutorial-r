@@ -40,7 +40,8 @@ km_plot <- ggplot(km_data, aes(x = time, y = surv, group = hormon)) +
   coord_cartesian(ylim = c(0, 1)) +
   theme_bw(base_size = 12) +
   theme(
-    legend.position = c(0, 0),
+    legend.position = "inside",
+    legend.position.inside = c(0, 0),
     legend.justification = c(0, 0),
     legend.key = element_blank(),
     legend.background = element_blank()
