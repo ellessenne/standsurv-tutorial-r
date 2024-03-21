@@ -24,7 +24,7 @@ fpm <- stpm2(Surv(exit, failure == 1) ~ hormon + size2 + size3 + grade + enodes 
 pred_h1 <- mean(predict(fpm, newdata = mutate(rott2, hormon = 1, exit = 10), type = "surv"))
 pred_h0 <- mean(predict(fpm, newdata = mutate(rott2, hormon = 0, exit = 10), type = "surv"))
 cbind(pred_h1 = pred_h1, pred_h0 = pred_h0, diff = pred_h1 - pred_h0)
-# Looks consistent with the paper
+# Looks consistent with the paper!
 # Now, we define a function that can do that for us, for any number of timepoints
 # This is specific to this application, so will have to be adjusted/redefined for other prediction settings
 standsurv <- function(fit, newdata, timevar, hormon) {
@@ -42,6 +42,7 @@ standsurv <- function(fit, newdata, timevar, hormon) {
     pull(s)
   return(nd)
 }
+# Note that this function is not really general nor optimised, so it is somewhat slow, but it does the job for now and is easy to adapt to other settings.
 # Then, we use the function above to create predictions for time 0 to 10:
 timevar <- seq(0, 10, length.out = 100)
 pred_h0 <- standsurv(fit = fpm, newdata = rott2, timevar = timevar, hormon = 0)
@@ -252,3 +253,56 @@ stdsesub_stddsesub_plot
 ggsave(filename = "output/05-stdsesub-plot.pdf", plot = stdsesub_plot, height = 4, width = 6)
 ggsave(filename = "output/05-stddsesub-plot.pdf", plot = stddsesub_plot, height = 4, width = 6)
 ggsave(filename = "output/05-stdsesub-stddsesub-plot.pdf", plot = stdsesub_stddsesub_plot, height = 4, width = 7)
+
+# Compare predictions standardised over the entire population vs predictions standardised over the subset with hormon=1:
+predictions_comp <- bind_rows(
+  predictions_se |> mutate(std = "Standardised to entire population"),
+  predictionssub_se |> mutate(std = "Standardised to treated population")
+)
+# Then, plot:
+stdcomp_plot <- ggplot(predictions_comp, aes(x = exit, y = s, linetype = hormon)) +
+  geom_ribbon(aes(ymin = lower, ymax = upper, fill = std), alpha = 0.1) +
+  geom_line(aes(color = std)) +
+  scale_x_continuous(breaks = seq(0, 10, by = 2)) +
+  scale_color_brewer(palette = "Dark2") +
+  scale_fill_brewer(palette = "Dark2") +
+  labs(y = "Survival probability", x = "Years from surgery", color = "", fill = "", linetype = "") +
+  coord_cartesian(ylim = c(0, 1)) +
+  theme_bw(base_size = 12) +
+  theme(
+    legend.position = "inside",
+    legend.position.inside = c(0, 0),
+    legend.justification = c(0, 0),
+    legend.key = element_blank(),
+    legend.background = element_blank()
+  )
+stdcomp_plot
+# Difference
+stddcomp_plot <- bind_rows(
+  tibble(exit = timevar, difference = pred_diff_se$fit, lower = pred_diff_se$`2.5 %`, upper = pred_diff_se$`97.5 %`, std = "Standardised to entire population"),
+  tibble(exit = timevar, difference = predsub_diff_se$fit, lower = predsub_diff_se$`2.5 %`, upper = predsub_diff_se$`97.5 %`, std = "Standardised to treated population")
+) |>
+  ggplot(aes(x = exit, y = difference)) +
+  geom_ribbon(aes(ymin = lower, ymax = upper, fill = std), alpha = 0.1) +
+  geom_line(aes(color = std), linetype = "dotdash") +
+  scale_x_continuous(breaks = seq(0, 10, by = 2)) +
+  scale_color_brewer(palette = "Dark2") +
+  scale_fill_brewer(palette = "Dark2") +
+  labs(y = "Difference in survival probability", x = "Years from surgery", color = "", fill = "", linetype = "") +
+  theme_bw(base_size = 12) +
+  theme(
+    legend.position = "inside",
+    legend.position.inside = c(1, 0),
+    legend.justification = c(1, 0),
+    legend.key = element_blank(),
+    legend.background = element_blank()
+  )
+stddcomp_plot
+# Same for the combined plot
+stdcomp_stddcomp_plot <- plot_grid(stdcomp_plot, stddcomp_plot + theme(legend.position = "none"), align = "hv", axis = "tblr", nrow = 1, labels = letters)
+stdcomp_stddcomp_plot
+
+# Export these plots
+ggsave(filename = "output/05-stdcomp-plot.pdf", plot = stdcomp_plot, height = 4, width = 6)
+ggsave(filename = "output/05-stddcomp-plot.pdf", plot = stddcomp_plot, height = 4, width = 6)
+ggsave(filename = "output/05-stdcomp-stddcomp-plot.pdf", plot = stdcomp_stddcomp_plot, height = 5, width = 7)
