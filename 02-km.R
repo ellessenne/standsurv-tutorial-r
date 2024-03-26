@@ -5,6 +5,7 @@ library(tidyverse)
 library(survival)
 library(ggplot2)
 library(pammtools)
+library(ragg)
 
 # Load data
 rott2 <- readRDS(file = "data/rott2.RDS")
@@ -51,3 +52,4 @@ km_plot
 
 # Export plot
 ggsave(filename = "output/02-km-plot.pdf", plot = km_plot, height = 4, width = 6)
+ggsave(filename = "output/02-km-plot.png", plot = km_plot, device = agg_png, height = 4, width = 6, dpi = 300)

@@ -9,6 +9,7 @@
 library(tidyverse)
 library(rstpm2)
 library(ggplot2)
+library(ragg)
 
 # Load data
 rott2 <- readRDS(file = "data/rott2.RDS")
@@ -60,3 +61,4 @@ unadjs_plot
 
 # Export plot
 ggsave(filename = "output/03-unadjs-plot.pdf", plot = unadjs_plot, height = 4, width = 6)
+ggsave(filename = "output/03-unadjs-plot.png", plot = unadjs_plot, device = agg_png, height = 4, width = 6, dpi = 300)

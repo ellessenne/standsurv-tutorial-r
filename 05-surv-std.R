@@ -8,6 +8,7 @@ library(tidyverse)
 library(rstpm2)
 library(ggplot2)
 library(cowplot)
+library(ragg)
 
 # Load data
 rott2 <- readRDS(file = "data/rott2.RDS")
@@ -103,6 +104,9 @@ std_stdd_plot
 ggsave(filename = "output/05-std-plot.pdf", plot = std_plot, height = 4, width = 6)
 ggsave(filename = "output/05-stdd-plot.pdf", plot = stdd_plot, height = 4, width = 6)
 ggsave(filename = "output/05-std-stdd-plot.pdf", plot = std_stdd_plot, height = 4, width = 7)
+ggsave(filename = "output/05-std-plot.png", plot = std_plot, device = agg_png, height = 4, width = 6, dpi = 300)
+ggsave(filename = "output/05-stdd-plot.png", plot = stdd_plot, device = agg_png, height = 4, width = 6, dpi = 300)
+ggsave(filename = "output/05-std-stdd-plot.png", plot = std_stdd_plot, device = agg_png, height = 4, width = 7, dpi = 300)
 
 # Note that the predictions above do not include confidence intervals, as we did not calculate them.
 # For this, we can use the predictnl() function from the {rstpm2} package.
@@ -164,6 +168,9 @@ stdse_stddse_plot
 ggsave(filename = "output/05-stdse-plot.pdf", plot = stdse_plot, height = 4, width = 6)
 ggsave(filename = "output/05-stddse-plot.pdf", plot = stddse_plot, height = 4, width = 6)
 ggsave(filename = "output/05-stdse-stddse-plot.pdf", plot = stdse_stddse_plot, height = 4, width = 7)
+ggsave(filename = "output/05-stdse-plot.png", plot = stdse_plot, device = agg_png, height = 4, width = 6, dpi = 300)
+ggsave(filename = "output/05-stddse-plot.png", plot = stddse_plot, device = agg_png, height = 4, width = 6, dpi = 300)
+ggsave(filename = "output/05-stdse-stddse-plot.png", plot = stdse_stddse_plot, device = agg_png, height = 4, width = 7, dpi = 300)
 
 # We can also calculate the ratio instead of the difference:
 standsurv_ratio <- function(value, ref, ...) {
@@ -191,6 +198,7 @@ stdrse_plot <- tibble(exit = timevar, ratio = pred_ratio_se$fit, lower = pred_ra
   )
 stdrse_plot
 ggsave(filename = "output/05-stdrse-plot.pdf", plot = stdrse_plot, height = 4, width = 6)
+ggsave(filename = "output/05-stdrse-plot.png", plot = stdrse_plot, device = agg_png, height = 4, width = 6, dpi = 300)
 
 ### Finally, we show how to standardise within a subset of the study population
 ### Above standardisation was performed using the empirical covariate distribution in the whole population i.e. we estimated the average relapse-free survival probability within the whole population, if everyone was treated compared to if no one was treated
@@ -253,6 +261,9 @@ stdsesub_stddsesub_plot
 ggsave(filename = "output/05-stdsesub-plot.pdf", plot = stdsesub_plot, height = 4, width = 6)
 ggsave(filename = "output/05-stddsesub-plot.pdf", plot = stddsesub_plot, height = 4, width = 6)
 ggsave(filename = "output/05-stdsesub-stddsesub-plot.pdf", plot = stdsesub_stddsesub_plot, height = 4, width = 7)
+ggsave(filename = "output/05-stdsesub-plot.png", plot = stdsesub_plot, device = agg_png, height = 4, width = 6, dpi = 300)
+ggsave(filename = "output/05-stddsesub-plot.png", plot = stddsesub_plot, device = agg_png, height = 4, width = 6, dpi = 300)
+ggsave(filename = "output/05-stdsesub-stddsesub-plot.png", plot = stdsesub_stddsesub_plot, device = agg_png, height = 4, width = 7, dpi = 300)
 
 # Compare predictions standardised over the entire population vs predictions standardised over the subset with hormon=1:
 predictions_comp <- bind_rows(
@@ -306,3 +317,6 @@ stdcomp_stddcomp_plot
 ggsave(filename = "output/05-stdcomp-plot.pdf", plot = stdcomp_plot, height = 4, width = 6)
 ggsave(filename = "output/05-stddcomp-plot.pdf", plot = stddcomp_plot, height = 4, width = 6)
 ggsave(filename = "output/05-stdcomp-stddcomp-plot.pdf", plot = stdcomp_stddcomp_plot, height = 5, width = 7)
+ggsave(filename = "output/05-stdcomp-plot.png", plot = stdcomp_plot, device = agg_png, height = 4, width = 6, dpi = 300)
+ggsave(filename = "output/05-stddcomp-plot.png", plot = stddcomp_plot, device = agg_png, height = 4, width = 6, dpi = 300)
+ggsave(filename = "output/05-stdcomp-stddcomp-plot.png", plot = stdcomp_stddcomp_plot, device = agg_png, height = 5, width = 7, dpi = 300)

@@ -6,6 +6,7 @@
 library(tidyverse)
 library(rstpm2)
 library(ggplot2)
+library(ragg)
 
 # Load data
 rott2 <- readRDS(file = "data/rott2.RDS")
@@ -63,6 +64,7 @@ adjs_plot
 
 # Export plot
 ggsave(filename = "output/04-adjs-plot.pdf", plot = adjs_plot, height = 4, width = 6)
+ggsave(filename = "output/04-adjs-plot.png", plot = adjs_plot, device = agg_png, height = 4, width = 6, dpi = 300)
 
 # Compare flexible parametric model and Cox model (for simplicity we assume no time-dependent effects for this comparison)
 # Fit Cox model
@@ -114,3 +116,4 @@ adjs_comp_plot
 
 # Export plot
 ggsave(filename = "output/04-adjs-comp-plot.pdf", plot = adjs_comp_plot, height = 4, width = 6)
+ggsave(filename = "output/04-adjs-comp-plot.png", plot = adjs_comp_plot, device = agg_png, height = 4, width = 6, dpi = 300)
