@@ -5,6 +5,7 @@
 # Packages
 library(haven)
 library(tidyverse)
+library(styler) # Only to ensure it is added to the {renv} lockfile
 
 # Load data
 rott2 <- read_dta(file = "data-raw/rott2.dta")
