@@ -10,7 +10,10 @@ The content of this repository is organised as follows.
 * Code to re-create the adjusted survival probability predictions is included in the `04-surv-adj.R` file;
 * Finally, code to re-create the standardised survival probability predictions (and contrast thereof) is included in the `05-surv-std.R` file.
 
-Plots replicating those from the manuscript are included in the `output/` folder, and the original Stata code is included in the `source/` folder as well, for completeness.
+Plots replicating those from the manuscript are included in the `output/` folder, in .pdf and .png format, and the original Stata code is included in the `source/` folder as well, for completeness.
+
+Note that this repository uses {renv} for reproducibility; after cloning this repository, you can restore the computational environment by running `renv::restore()` in your R console.
+You can read more about {renv} [here](https://rstudio.github.io/renv/articles/renv.html).
 
 # License
 
